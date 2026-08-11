@@ -1,59 +1,78 @@
-# Terraform AWS Infrastructure
+# Terraform AWS Networking Infrastructure
 
-A hands-on Infrastructure as Code project built with **Terraform** to provision and manage AWS infrastructure.
+A practical **Infrastructure as Code (IaC)** project using Terraform to design and manage a basic AWS networking environment.
 
 ## Project Overview
 
-This project demonstrates how to use Terraform to define AWS infrastructure as code in a reusable and maintainable way.
+This project demonstrates how Terraform can be used to define AWS networking infrastructure as code.
 
-The infrastructure is designed to include a VPC and supporting AWS networking components. The project is being developed incrementally while practicing Terraform configuration, variables, outputs, validation, planning, version control, and GitHub workflows.
+The infrastructure includes a VPC, public subnet, Internet Gateway, route table, route table association, and a security group.
+
+The project was built incrementally and tested using Terraform's standard workflow.
+
+## Architecture
+
+```text
+                         Internet
+                             │
+                             ▼
+                    Internet Gateway
+                             │
+                             ▼
+                    ┌────────────────┐
+                    │      VPC       │
+                    │  10.0.0.0/16   │
+                    │                │
+                    │  ┌───────────┐ │
+                    │  │  Public   │ │
+                    │  │  Subnet   │ │
+                    │  │10.0.1.0/24│ │
+                    │  └─────┬─────┘ │
+                    │        │       │
+                    │  Route Table   │
+                    │        │       │
+                    │ Security Group │
+                    └────────────────┘
+```
+
+## Infrastructure Components
+
+| Component               | Purpose                                           |
+| ----------------------- | ------------------------------------------------- |
+| VPC                     | Provides the isolated AWS network                 |
+| Public Subnet           | Provides a subnet inside the VPC                  |
+| Internet Gateway        | Provides internet connectivity for the VPC        |
+| Route Table             | Defines the route for internet traffic            |
+| Route Table Association | Associates the route table with the public subnet |
+| Security Group          | Controls inbound and outbound traffic             |
 
 ## Technologies
 
 * Terraform
-* AWS
-* AWS VPC
+* Amazon Web Services (AWS)
 * Git
 * GitHub
 * Infrastructure as Code (IaC)
 
-## Current Architecture
-
-The planned infrastructure is:
-
-```text
-                    AWS
-                     │
-                    VPC
-                     │
-              ┌──────┴──────┐
-              │             │
-        Public Subnet    Route Table
-              │
-             EC2
-              │
-       Security Group
-              │
-       Internet Gateway
-```
-
 ## Terraform Concepts Demonstrated
 
-This project currently demonstrates:
+This project demonstrates:
 
 * Terraform providers
-* Terraform resources
+* Resources
+* Resource references
+* Implicit dependencies
 * Input variables
-* Resource outputs
-* Terraform state management
-* `terraform init`
-* `terraform fmt`
-* `terraform validate`
-* `terraform plan`
+* Outputs
+* Security groups
+* AWS networking
+* Terraform state
+* `.gitignore`
+* Terraform formatting
+* Configuration validation
+* Terraform planning
 * Git version control
 * GitHub repository management
-
-Additional Terraform concepts will be added as the project develops.
 
 ## Project Structure
 
@@ -62,10 +81,14 @@ terraform-aws-infrastructure/
 │
 ├── .gitignore
 ├── .terraform.lock.hcl
+├── README.md
 ├── main.tf
 ├── variables.tf
 ├── outputs.tf
-└── README.md
+├── subnet.tf
+├── internet_gateway.tf
+├── route_table.tf
+└── security_group.tf
 ```
 
 ## Terraform Workflow
@@ -73,51 +96,96 @@ terraform-aws-infrastructure/
 The project follows the standard Terraform workflow:
 
 ```text
-Write Configuration
-        ↓
-terraform init
-        ↓
-terraform fmt
-        ↓
-terraform validate
-        ↓
-terraform plan
-        ↓
-terraform apply
-        ↓
-Verify Infrastructure
+Terraform Configuration
+          │
+          ▼
+    terraform init
+          │
+          ▼
+    terraform fmt
+          │
+          ▼
+  terraform validate
+          │
+          ▼
+    terraform plan
+          │
+          ▼
+   terraform apply
 ```
 
-The configuration has been successfully initialized, formatted, validated, and planned.
+The configuration was successfully initialized, formatted, validated, and planned.
 
-## Current AWS Environment
+## Validation
 
-The project is currently being developed using a restricted training AWS environment.
+Terraform validation completed successfully:
 
-The AWS account does not currently provide permission to create VPC resources, so `terraform apply` cannot be completed in the training environment.
+```text
+Success! The configuration is valid.
+```
 
-The Terraform configuration itself has been successfully validated and planned.
+The final Terraform plan contains:
 
-When an AWS environment with the required permissions is available, the infrastructure can be deployed and verified.
+```text
+Plan: 6 to add, 0 to change, 0 to destroy.
+```
+
+## AWS Permissions
+
+The project was developed in a restricted training AWS environment.
+
+The AWS account used for training does not provide sufficient permissions to create the required VPC infrastructure. Therefore, `terraform apply` was not executed in the training environment.
+
+This demonstrates an important distinction between:
+
+* Terraform configuration
+* Terraform validation and planning
+* AWS IAM authorization
+
+The Terraform configuration itself was successfully validated and planned.
 
 ## Security
 
-No AWS credentials, passwords, or sensitive Terraform state files are stored in this repository.
+Sensitive and local Terraform files are excluded from the Git repository using `.gitignore`.
 
-The `.gitignore` file is configured to prevent sensitive or local Terraform files from being committed accidentally.
+The following are not committed:
 
-## Learning Goals
+```text
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+```
 
-The main goals of this project are:
+AWS credentials and other sensitive information are not stored in this repository.
+
+## Learning Objectives
+
+The main objectives of this project were to:
 
 1. Build practical Terraform skills.
-2. Understand AWS networking through Infrastructure as Code.
-3. Practice Terraform configuration and troubleshooting.
-4. Use Git and GitHub professionally.
-5. Build a portfolio project demonstrating Cloud Engineering skills.
+2. Understand AWS VPC networking.
+3. Practice Terraform resource dependencies.
+4. Work with variables and outputs.
+5. Understand AWS security groups.
+6. Practice the Terraform workflow.
+7. Use Git and GitHub professionally.
+8. Build a practical Cloud Engineering portfolio project.
+
+## Future Improvements
+
+Possible future extensions include:
+
+* EC2 instance
+* Private subnet
+* NAT Gateway
+* Load Balancer
+* Multiple availability zones
+* Terraform modules
+* Remote Terraform state
 
 ## Author
 
 **Khadim Hussain Bahonar**
 
-This project was created as part of my practical learning in **Cloud Computing, AWS, Terraform, and Infrastructure as Code**.
+Cloud Computing & Infrastructure as Code learner, focusing on **AWS, Terraform, Linux, and Cloud Engineering**.
